@@ -2,6 +2,7 @@ import express from "express";
 import db from "./store/db/db";
 import router from "./routes/router";
 import { CountryList } from "./model/CountryList";
+import cors from "./middleware/cors";
 
 const prepare = async () => {
   try {
@@ -22,6 +23,8 @@ const main = async () => {
   const app = express();
 
   prepare();
+
+  app.use(cors);
 
   app.use(express.json());
   app.use(router);

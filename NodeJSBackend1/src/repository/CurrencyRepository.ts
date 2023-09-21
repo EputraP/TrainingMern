@@ -12,7 +12,7 @@ export const GetCountryList = async () => {
   } catch (error: any) {
     return FunctionResponse({
       Data: null,
-      Error: error,
+      Error: error.errors[0].message,
     });
   }
 };
@@ -31,7 +31,7 @@ export const GetCountryById = async (input: IdCountryParamsType["params"]) => {
   } catch (error: any) {
     return FunctionResponse({
       Data: null,
-      Error: error,
+      Error: error.errors[0].message,
     });
   }
 };
@@ -49,7 +49,7 @@ export const CreateCountry = async (input: CreateCountryType["body"]) => {
   } catch (error: any) {
     return FunctionResponse({
       Data: null,
-      Error: error,
+      Error: error.errors[0].message,
     });
   }
 };
@@ -75,7 +75,7 @@ export const DeleteSingleCountry = async (
   } catch (error: any) {
     return FunctionResponse({
       Data: null,
-      Error: error,
+      Error: error.errors[0].message,
     });
   }
 };

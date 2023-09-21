@@ -4,6 +4,7 @@ import {
   GetDailyData,
   CreateNewCountry,
   DeleteCountry,
+  GetCountryCheckAvail,
 } from "../service/CurrencyService";
 import { NewResponse } from "../util/response";
 
@@ -52,6 +53,26 @@ export const GetHourlyById = async (req: any, res: any) => {
         Code: 200,
         Message: "Get Country Hourly Success",
         Data: Data,
+      })
+    );
+  } catch (error: any) {
+    res.send(
+      NewResponse({
+        Code: 500,
+        Message: error,
+        Data: null,
+      })
+    );
+  }
+};
+export const GetCountryCheckHandler = async (req: any, res: any) => {
+  try {
+    const { Data, Error } = GetCountryCheckAvail(req.params.name);
+    res.send(
+      NewResponse({
+        Code: 200,
+        Message: "Success Checking Country",
+        Data: [Data],
       })
     );
   } catch (error: any) {

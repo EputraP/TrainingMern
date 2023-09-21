@@ -1,4 +1,8 @@
-import { CreateCountrySchema, IdCountryParamsSchema } from "../dto/CurrencyDTO";
+import {
+  CreateCountrySchema,
+  IdCountryParamsSchema,
+  NameCountryParamsSchema,
+} from "../dto/CurrencyDTO";
 import { NewResponse } from "../util/response";
 
 const validate = (schema: any) => (req: any, res: any, next: any) => {
@@ -23,3 +27,4 @@ const validate = (schema: any) => (req: any, res: any, next: any) => {
 export const CreateCountryValidation = validate(CreateCountrySchema);
 export const DeleteCountryValidation = validate(IdCountryParamsSchema);
 export const IdCountryParamsValidation = validate(IdCountryParamsSchema);
+export const NameCountryParamsValidation = validate(NameCountryParamsSchema);

@@ -11,6 +11,7 @@ import {
   RandomDataType,
 } from "../dto/CurrencyDTO";
 import { FunctionResponse } from "../util/functionresponse";
+import { getCode } from "country-list";
 
 const CheckCountryAvailibility = async (
   input: IdCountryParamsType["params"]
@@ -141,6 +142,34 @@ export const GetDailyData = async (input: IdCountryParamsType["params"]) => {
     const AggregateRes = AggregateValue("day", randomDataRes);
 
     return FunctionResponse({ Data: AggregateRes, Error: null });
+  } catch (error: any) {
+    return FunctionResponse({
+      Data: null,
+      Error: error,
+    });
+  }
+};
+
+export const GetCountryCheckAvail = (input: string) => {
+  try {
+    const countryCode = getCode(input);
+    if (typeof countryCode == "undefined")
+      return FunctionResponse({
+        Data: {
+          countryName: input,
+          code: null,
+          status: "unavaliable",
+        },
+        Error: null,
+      });
+    return FunctionResponse({
+      Data: {
+        countryName: input,
+        code: countryCode,
+        status: "available",
+      },
+      Error: null,
+    });
   } catch (error: any) {
     return FunctionResponse({
       Data: null,
