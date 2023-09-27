@@ -2,6 +2,7 @@ import express from "express";
 import db from "./store/db/db";
 import router from "./routes/router";
 import { CountryList } from "./model/CountryList";
+import { PriorityList, NotesRaw } from "./model/Calendar";
 import cors from "./middleware/cors";
 
 const prepare = async () => {
@@ -13,6 +14,9 @@ const prepare = async () => {
   }
   try {
     await CountryList.sync();
+    await PriorityList.sync();
+    await NotesRaw.sync();
+
     console.log("Sync");
   } catch (e) {
     console.log("Failed to model and db sync", e);

@@ -4,7 +4,9 @@ import { FunctionResponse } from "../util/functionresponse";
 
 export const GetCountryList = async () => {
   try {
-    const CountryListVal = await CountryList.findAll();
+    const CountryListVal = await CountryList.findAll({
+      order: [["createdAt", "ASC"]],
+    });
     return FunctionResponse({
       Data: JSON.stringify(CountryListVal, undefined, 2),
       Error: null,

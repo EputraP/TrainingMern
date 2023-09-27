@@ -13,7 +13,7 @@ import {
 import { FunctionResponse } from "../util/functionresponse";
 import { getCode } from "country-list";
 
-const CheckCountryAvailibility = async (
+const CheckCountryAvailibilityService = async (
   input: IdCountryParamsType["params"]
 ) => {
   const { Data, Error } = await GetCountryById(input);
@@ -24,7 +24,7 @@ const CheckCountryAvailibility = async (
   return FunctionResponse({ Data: Data, Error: null });
 };
 
-const GenerateRandomValue = (baseValue: number) => {
+const GenerateRandomValueService = (baseValue: number) => {
   let RandomDataRes: RandomDataType[] = [];
   const base = baseValue;
   const tolerance = 0.3;
@@ -46,7 +46,10 @@ const GenerateRandomValue = (baseValue: number) => {
   return RandomDataRes;
 };
 
-const AggregateValue = (inputGroupBy: string, data: RandomDataType[]) => {
+const AggregateValueService = (
+  inputGroupBy: string,
+  data: RandomDataType[]
+) => {
   let group: any = {};
   let AggregateRes: RandomDataType[] = [];
   const groupBy = inputGroupBy;
@@ -85,7 +88,7 @@ const AggregateValue = (inputGroupBy: string, data: RandomDataType[]) => {
   return AggregateRes;
 };
 
-export const GetAllCountryList = async () => {
+export const GetAllCountryListService = async () => {
   try {
     const CountryListRes: GetCountryListType[] = [];
 
@@ -109,37 +112,19 @@ export const GetAllCountryList = async () => {
   }
 };
 
-export const GetHourlyData = async (input: IdCountryParamsType["params"]) => {
+export const GetHourlyDataService = async (
+  input: IdCountryParamsType["params"]
+) => {
   try {
     const { Data: DataCountry, Error: ErrorCountryById } =
-      await CheckCountryAvailibility(input);
+      await CheckCountryAvailibilityService(input);
     if (ErrorCountryById != null)
       return FunctionResponse({ Data: null, Error: ErrorCountryById });
     const CountryObj: any = JSON.parse(DataCountry);
 
-    const randomDataRes = GenerateRandomValue(CountryObj[0].value);
+    const randomDataRes = GenerateRandomValueService(CountryObj[0].value);
 
-    const AggregateRes = AggregateValue("hour", randomDataRes);
-
-    return FunctionResponse({ Data: AggregateRes, Error: null });
-  } catch (error: any) {
-    return FunctionResponse({
-      Data: null,
-      Error: error,
-    });
-  }
-};
-export const GetDailyData = async (input: IdCountryParamsType["params"]) => {
-  try {
-    const { Data: DataCountry, Error: ErrorCountryById } =
-      await CheckCountryAvailibility(input);
-    if (ErrorCountryById != null)
-      return FunctionResponse({ Data: null, Error: ErrorCountryById });
-    const CountryObj: any = JSON.parse(DataCountry);
-
-    const randomDataRes = GenerateRandomValue(CountryObj[0].value);
-
-    const AggregateRes = AggregateValue("day", randomDataRes);
+    const AggregateRes = AggregateValueService("hour", randomDataRes);
 
     return FunctionResponse({ Data: AggregateRes, Error: null });
   } catch (error: any) {
@@ -150,7 +135,30 @@ export const GetDailyData = async (input: IdCountryParamsType["params"]) => {
   }
 };
 
-export const GetCountryCheckAvail = (input: string) => {
+export const GetDailyDataService = async (
+  input: IdCountryParamsType["params"]
+) => {
+  try {
+    const { Data: DataCountry, Error: ErrorCountryById } =
+      await CheckCountryAvailibilityService(input);
+    if (ErrorCountryById != null)
+      return FunctionResponse({ Data: null, Error: ErrorCountryById });
+    const CountryObj: any = JSON.parse(DataCountry);
+
+    const randomDataRes = GenerateRandomValueService(CountryObj[0].value);
+
+    const AggregateRes = AggregateValueService("day", randomDataRes);
+
+    return FunctionResponse({ Data: AggregateRes, Error: null });
+  } catch (error: any) {
+    return FunctionResponse({
+      Data: null,
+      Error: error,
+    });
+  }
+};
+
+export const GetCountryCheckAvailService = (input: string) => {
   try {
     const countryCode = getCode(input);
     if (typeof countryCode == "undefined")
@@ -178,7 +186,9 @@ export const GetCountryCheckAvail = (input: string) => {
   }
 };
 
-export const CreateNewCountry = async (input: CreateCountryType["body"]) => {
+export const CreateNewCountryService = async (
+  input: CreateCountryType["body"]
+) => {
   try {
     const { Data, Error } = await CreateCountry(input);
     if (Error != null) return FunctionResponse({ Data: null, Error: Error });
@@ -192,9 +202,13 @@ export const CreateNewCountry = async (input: CreateCountryType["body"]) => {
   }
 };
 
-export const DeleteCountry = async (input: IdCountryParamsType["params"]) => {
+export const DeleteCountryService = async (
+  input: IdCountryParamsType["params"]
+) => {
   try {
-    const { Error: ErrorCountryById } = await CheckCountryAvailibility(input);
+    const { Error: ErrorCountryById } = await CheckCountryAvailibilityService(
+      input
+    );
     if (ErrorCountryById != null)
       return FunctionResponse({ Data: null, Error: ErrorCountryById });
 

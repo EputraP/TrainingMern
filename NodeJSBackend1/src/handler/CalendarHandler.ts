@@ -1,16 +1,15 @@
-import {
-  GetAllCountryListService,
-  GetHourlyDataService,
-  GetDailyDataService,
-  CreateNewCountryService,
-  DeleteCountryService,
-  GetCountryCheckAvailService,
-} from "../service/CurrencyService";
 import { NewResponse } from "../util/response";
+import {
+  GetMonthListService,
+  GetYearListService,
+  GetAllPriorityListService,
+  CreateNoteService,
+  GetCalenderWithNotesService,
+} from "../service/CalendarService";
 
-export const GetCountryHandler = async (req: any, res: any) => {
+export const GetMonthListHandler = (req: any, res: any) => {
   try {
-    const { Data, Error } = await GetAllCountryListService();
+    const { Data, Error } = GetMonthListService();
     if (Error != null)
       return res.send(
         NewResponse({
@@ -22,7 +21,7 @@ export const GetCountryHandler = async (req: any, res: any) => {
     res.send(
       NewResponse({
         Code: 200,
-        Message: "Get Country List Success",
+        Message: "Get Month List Success",
         Data: Data,
       })
     );
@@ -37,9 +36,9 @@ export const GetCountryHandler = async (req: any, res: any) => {
   }
 };
 
-export const GetHourlyById = async (req: any, res: any) => {
+export const GetYearListHandler = (req: any, res: any) => {
   try {
-    const { Data, Error } = await GetHourlyDataService(req.params.id);
+    const { Data, Error } = GetYearListService();
     if (Error != null)
       return res.send(
         NewResponse({
@@ -51,56 +50,7 @@ export const GetHourlyById = async (req: any, res: any) => {
     res.send(
       NewResponse({
         Code: 200,
-        Message: "Get Country Hourly Success",
-        Data: Data,
-      })
-    );
-  } catch (error: any) {
-    res.send(
-      NewResponse({
-        Code: 500,
-        Message: error,
-        Data: null,
-      })
-    );
-  }
-};
-export const GetCountryCheckHandler = async (req: any, res: any) => {
-  try {
-    const { Data, Error } = GetCountryCheckAvailService(req.params.name);
-    res.send(
-      NewResponse({
-        Code: 200,
-        Message: "Success Checking Country",
-        Data: [Data],
-      })
-    );
-  } catch (error: any) {
-    res.send(
-      NewResponse({
-        Code: 500,
-        Message: error,
-        Data: null,
-      })
-    );
-  }
-};
-
-export const GetDailyById = async (req: any, res: any) => {
-  try {
-    const { Data, Error } = await GetDailyDataService(req.params.id);
-    if (Error != null)
-      return res.send(
-        NewResponse({
-          Code: 500,
-          Message: Error,
-          Data: null,
-        })
-      );
-    res.send(
-      NewResponse({
-        Code: 200,
-        Message: "Get Country Hourly Success",
+        Message: "Get Year List Success",
         Data: Data,
       })
     );
@@ -115,9 +65,67 @@ export const GetDailyById = async (req: any, res: any) => {
   }
 };
 
-export const CreateCountryHandler = async (req: any, res: any) => {
+export const GetPriorityHandler = async (req: any, res: any) => {
   try {
-    const { Data, Error } = await CreateNewCountryService(req.body);
+    const { Data, Error } = await GetAllPriorityListService();
+    if (Error != null)
+      return res.send(
+        NewResponse({
+          Code: 500,
+          Message: Error,
+          Data: null,
+        })
+      );
+    res.send(
+      NewResponse({
+        Code: 200,
+        Message: "Get Priority List Success",
+        Data: Data,
+      })
+    );
+  } catch (error: any) {
+    res.send(
+      NewResponse({
+        Code: 500,
+        Message: error,
+        Data: null,
+      })
+    );
+  }
+};
+
+export const GetCalenderWithNotesHandler = async (req: any, res: any) => {
+  try {
+    const { Data, Error } = await GetCalenderWithNotesService(req.body);
+    if (Error != null)
+      return res.send(
+        NewResponse({
+          Code: 500,
+          Message: Error,
+          Data: null,
+        })
+      );
+    res.send(
+      NewResponse({
+        Code: 200,
+        Message: "Get Calendar With Notes Success",
+        Data: Data,
+      })
+    );
+  } catch (error: any) {
+    res.send(
+      NewResponse({
+        Code: 500,
+        Message: error,
+        Data: null,
+      })
+    );
+  }
+};
+
+export const CreateNoteHandler = async (req: any, res: any) => {
+  try {
+    const { Data, Error } = await CreateNoteService(req.body);
     if (Error != null)
       return res.send(
         NewResponse({
@@ -129,7 +137,7 @@ export const CreateCountryHandler = async (req: any, res: any) => {
     res.send(
       NewResponse({
         Code: 201,
-        Message: "Create Country Success",
+        Message: "Create Note Success",
         Data: Data,
       })
     );
@@ -144,22 +152,15 @@ export const CreateCountryHandler = async (req: any, res: any) => {
   }
 };
 
-export const DeleteCountryHandler = async (req: any, res: any) => {
+export const UpdateNoteHandler = async (req: any, res: any) => {
   try {
-    const { Data, Error } = await DeleteCountryService(req.params.id);
-    if (Error != null)
-      return res.send(
-        NewResponse({
-          Code: 500,
-          Message: Error,
-          Data: null,
-        })
-      );
+    console.log(req.params.id);
+    console.log(req.body);
     res.send(
       NewResponse({
         Code: 201,
-        Message: "Delete Country Success",
-        Data: Data,
+        Message: "Update Note Success",
+        Data: [req.params.id, req.body],
       })
     );
   } catch (error: any) {
